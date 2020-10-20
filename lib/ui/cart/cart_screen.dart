@@ -1,0 +1,76 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kassual/bloc/cart_bloc/cart_bloc.dart';
+import 'package:kassual/models/cart/cart.dart';
+import 'package:kassual/models/home_screen/home_screen_bloc.dart';
+import 'package:kassual/ui/cart/cart_empty.dart';
+import 'package:kassual/ui/cart/cart_item.dart';
+import 'package:kassual/ui/cart/cart_stepper_widget.dart';
+import 'package:kassual/ui/cart/check_out_screen.dart';
+import 'package:kassual/ui/cart/step_widget.dart';
+import 'package:kassual/ui/widgets/app_bar.dart';
+
+class CartScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) {
+        if (state is CartStateLoaded) {
+          return state.cart.products.isEmpty
+              ? CartEmpty()
+              : loaded(state.cart, context);
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  Scaffold loaded(Cart cart, BuildContext context) {
+    return Scaffold(
+      // appBar: AppBar(title: Text("KASSUAL"), toolbarHeight: 100),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) =>
+            [KAppBar(title: "CART", withIcon: false)],
+        body: ListView(
+          padding: EdgeInsets.all(10),
+          physics: BouncingScrollPhysics(),
+          children: [
+            CartStepper(currentStep: 0),
+            SizedBox(height: 20),
+            Center(
+              child: Text("Shopping Bag"),
+            ),
+            SizedBox(height: 20),
+            for (var p in cart.products.entries)
+              CartItemWidget(item: p.key, count: p.value),
+            SizedBox(height: 10),
+            Text("Total ${cart.totalPrice}\$"),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: TextButton.icon(
+                label: Text("Continue Chopping"),
+                icon: Icon(Icons.arrow_back_ios),
+                onPressed: () =>
+                    HomeScreenBloc.of(context).add(HomeScreenSetIndex(0)),
+              ),
+            ),
+            RaisedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddressScreen(),
+                ),
+              ),
+              color: Colors.brown,
+              colorBrightness: Brightness.dark,
+              child: Text("PROCEED CHECK OUT"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
