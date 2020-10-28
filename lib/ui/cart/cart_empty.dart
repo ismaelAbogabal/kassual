@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kassual/models/home_screen/home_screen_bloc.dart';
+import 'package:kassual/bloc/home_screen/home_screen_bloc.dart';
 
 class CartEmpty extends StatelessWidget {
   const CartEmpty({Key key}) : super(key: key);
@@ -7,7 +7,7 @@ class CartEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("CART"),toolbarHeight: 100),
+      appBar: AppBar(title: Text("CART"), toolbarHeight: 100),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -24,7 +24,7 @@ class CartEmpty extends StatelessWidget {
               label: Text("Continue Shopping"),
               textColor: Colors.brown,
               onPressed: () =>
-                  HomeScreenBloc.of(context).add(HomeScreenSetIndex(0)),
+                  HomeScreenBloc.of(context).add(HomeScreenSetScreen(0)),
             )
           ],
         ),

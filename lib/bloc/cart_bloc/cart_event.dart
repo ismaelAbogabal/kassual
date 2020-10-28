@@ -3,6 +3,12 @@ part of 'cart_bloc.dart';
 @immutable
 abstract class CartEvent {}
 
+class CartEventInit extends CartEvent {
+  final ShopifyUser user;
+
+  CartEventInit(this.user);
+}
+
 class CartEventAddProduct extends CartEvent {
   final Product product;
 

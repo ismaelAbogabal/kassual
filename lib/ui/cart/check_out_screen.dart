@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kassual/ui/cart/Shipping_method_screen.dart';
 import 'package:kassual/ui/cart/cart_stepper_widget.dart';
-import 'package:kassual/ui/cart/step_widget.dart';
 import 'package:kassual/ui/widgets/app_bar.dart';
 
 class AddressScreen extends StatelessWidget {

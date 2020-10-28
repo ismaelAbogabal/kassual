@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kassual/bloc/cart_bloc/cart_bloc.dart';
 import 'package:kassual/models/alert.dart';
-import 'package:kassual/models/product/product.dart';
 
 // ignore: must_be_immutable
 class CartItemWidget extends StatelessWidget {
-  final Product item;
-  final int count;
+  final LineItem item;
 
   BuildContext _context;
 
   CartItemWidget({
     Key key,
     @required this.item,
-    @required this.count,
   }) : super(key: key);
 
   @override
@@ -44,21 +42,21 @@ class CartItemWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Item:  ${item.name}"),
-              Text("Brand: ${item.brande}"),
+              Text("Item:  ${item.title}"),
+              // Text("Brand: ${item.brande}"),
               Row(
                 children: [
                   Text("Count: "),
                   reduceBtn(),
-                  Text("$count"),
+                  Text("${item.quantity}"),
                   addBtn(),
                 ],
               ),
-              Text("Price: ${item.sellPrice}\$")
+              Text("Price: ${item.variant.price.formattedPrice}\$")
             ],
           ),
         ),
-        Expanded(child: Image.network(item.image)),
+        Expanded(child: Image.network(item.variant.image.originalSource)),
       ],
     );
   }
@@ -67,9 +65,9 @@ class CartItemWidget extends StatelessWidget {
     return IconButton(
         icon: Icon(Icons.add_circle_outline),
         onPressed: () {
-          CartBloc.of(_context).add(
-            CartEventChangeCount(item, count + 1),
-          );
+          // CartBloc.of(_context).add(
+          //   CartEventChangeCount(item, count + 1),
+          // );
         });
   }
 
@@ -77,10 +75,10 @@ class CartItemWidget extends StatelessWidget {
     return IconButton(
       icon: Icon(Icons.remove_circle_outline),
       onPressed: () {
-        if (count > 1)
-          CartBloc.of(_context).add(
-            CartEventChangeCount(item, count - 1),
-          );
+        // if (count > 1)
+        //   CartBloc.of(_context).add(
+        //     CartEventChangeCount(item, count - 1),
+        //   );
       },
     );
   }
@@ -95,7 +93,7 @@ class CartItemWidget extends StatelessWidget {
         );
 
         if (confirm) {
-          CartBloc.of(context).add(CartEventRemoveProduct(item));
+          // CartBloc.of(context).add(CartEventRemoveProduct(item));
         }
       },
       child: Container(

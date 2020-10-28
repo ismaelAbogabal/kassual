@@ -53,14 +53,18 @@ class AppTheme {
       centerTitle: true,
       color: Colors.transparent,
       textTheme: TextTheme(
-        headline6: TextStyle(
-          color: Colors.black45,
-          fontSize: 18,
-          letterSpacing: 5,
-          fontFamily: "libre",
-          fontWeight: FontWeight.bold,
-        ),
+        headline6: titleTextStyle(),
       ),
+    );
+  }
+
+  static TextStyle titleTextStyle() {
+    return TextStyle(
+      color: Colors.black45,
+      fontSize: 18,
+      letterSpacing: 5,
+      fontFamily: "libre",
+      fontWeight: FontWeight.bold,
     );
   }
 
@@ -68,5 +72,9 @@ class AppTheme {
     color: Colors.grey,
     fontSize: 14,
     decoration: TextDecoration.lineThrough,
+  );
+  static const TextStyle errorTextStyle = TextStyle(
+    color: Colors.redAccent,
+    fontSize: 14,
   );
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kassual/models/cart/shipping_meyhod.dart';
+import 'package:kassual/models/cart/shipping_method.dart';
 import 'package:kassual/samples/shipping_methods_samples.dart';
 import 'package:kassual/ui/cart/cart_stepper_widget.dart';
 
@@ -9,7 +9,7 @@ class ShippingMethodScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Shipping method"),toolbarHeight: 100),
+      appBar: AppBar(title: Text("Shipping method"), toolbarHeight: 100),
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: [

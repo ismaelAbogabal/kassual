@@ -5,6 +5,9 @@ import 'package:kassual/models/product/product.dart';
 import 'package:kassual/ui/cart/cart_screen.dart';
 import 'package:kassual/ui/widgets/for_items_list.dart';
 
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 class ProductScreen extends StatefulWidget {
   final Product product;
 
@@ -60,7 +63,13 @@ class _ProductScreenState extends State<ProductScreen> {
               child: Text("ADD TO CART"),
             ),
           ),
-          buildExpansionPanelList(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: HtmlWidget(
+              widget.product.description,
+              onTapUrl: (u) => launch(u),
+            ),
+          ),
         ],
       ),
     );
@@ -91,10 +100,13 @@ class _ProductScreenState extends State<ProductScreen> {
           headerBuilder: (context, isExpanded) =>
               ListTile(title: Text("Description")),
           isExpanded: expandedIndex == 1,
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(widget.product.description),
+          body: HtmlWidget(
+            widget.product.description,
           ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Text(widget.product.description),
+          // ),
         ),
       ],
     );
@@ -104,7 +116,7 @@ class _ProductScreenState extends State<ProductScreen> {
     return AspectRatio(
       aspectRatio: 1,
       child: Hero(
-        tag: widget.product.image,
+        tag: widget.product.id,
         child: PageView(
           children: widget.product.images.map((e) => Image.network(e)).toList(),
         ),

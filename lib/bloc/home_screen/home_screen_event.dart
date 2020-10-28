@@ -1,8 +1,8 @@
 part of 'home_screen_bloc.dart';
 
 @immutable
-class HomeScreenLoaded {
+class HomeScreenSetScreen {
   final int index;
 
-  HomeScreenLoaded(this.index);
+  HomeScreenSetScreen(this.index);
 }

@@ -9,7 +9,7 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      onChanged: search,
+      onSubmitted: search,
       decoration: InputDecoration(
         hintText: "Search Here",
         suffixIcon: Container(

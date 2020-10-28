@@ -1,10 +1,16 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kassual/models/home_screen/home_screen_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:kassual/bloc/home_screen/home_screen_bloc.dart';
+import 'package:kassual/bloc/user_bloc/user_bloc.dart';
+import 'package:kassual/config/theme.dart';
+import 'package:kassual/models/product/collections.dart';
+import 'package:kassual/ui/authentication/authentication_screen.dart';
 import 'package:kassual/ui/authentication/login_screen.dart';
 import 'package:kassual/ui/cart/cart_screen.dart';
-import 'package:kassual/ui/home/ols_home_screen.dart';
+import 'package:kassual/ui/home/home_screen_content.dart';
 import 'package:kassual/ui/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,10 +19,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  body(int _index) {
+  body(int _index, List<Collection> collections) {
     switch (_index) {
       case 0:
-        return OldHomeScreen();
+        return HomeScreenContent(collections: collections);
         break;
       case 1:
         return SearchScreen();
@@ -25,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return CartScreen();
         break;
       case 3:
-        return LoginScreen();
+        return AuthenticationScreen();
         break;
       default:
     }
@@ -38,44 +44,55 @@ class _HomeScreenState extends State<HomeScreen> {
       create: (context) => HomeScreenBloc(),
       child: Builder(
         builder: (context) {
-          return BlocBuilder<HomeScreenBloc, HomeScreenLoaded>(
+          return BlocBuilder<HomeScreenBloc, HomeScreenState>(
             builder: (context, state) {
+              /// remove the error in the login screen
+              UserBloc.of(context).add(UERemoveError());
               return WillPopScope(
                 onWillPop: () async {
                   if (state.index == 0) {
                     return true;
                   } else {
-                    HomeScreenBloc.of(context).add(HomeScreenSetIndex(0));
+                    HomeScreenBloc.of(context).add(HomeScreenSetScreen(0));
                     return false;
                   }
                 },
-                child: Scaffold(
-                  body: body(state.index),
-                  bottomNavigationBar: BottomNavigationBar(
-                    currentIndex: state.index,
-                    onTap: (value) => HomeScreenBloc.of(context).add(
-                      HomeScreenSetIndex(value),
-                    ),
-                    items: [
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.home_filled),
-                        label: "a",
+                child: state.collections.isEmpty
+                    ? Material(
+                        child: Center(
+                          child: WavyAnimatedTextKit(
+                            text: ["KASSUAL"],
+                            textStyle: AppTheme.titleTextStyle(),
+                          ),
+                        ),
+                      )
+                    : Scaffold(
+                        body: body(state.index, state.collections),
+                        bottomNavigationBar: BottomNavigationBar(
+                          currentIndex: state.index,
+                          onTap: (value) => HomeScreenBloc.of(context).add(
+                            HomeScreenSetScreen(value),
+                          ),
+                          items: [
+                            BottomNavigationBarItem(
+                              icon: Icon(Icons.home_filled),
+                              label: "a",
+                            ),
+                            BottomNavigationBarItem(
+                              icon: Icon(Icons.search),
+                              label: "a",
+                            ),
+                            BottomNavigationBarItem(
+                              icon: Icon(Icons.shopping_bag_outlined),
+                              label: "a",
+                            ),
+                            BottomNavigationBarItem(
+                              icon: Icon(Icons.person_outline),
+                              label: "a",
+                            ),
+                          ],
+                        ),
                       ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.search),
-                        label: "a",
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.shopping_bag_outlined),
-                        label: "a",
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.person_outline),
-                        label: "a",
-                      ),
-                    ],
-                  ),
-                ),
               );
             },
           );

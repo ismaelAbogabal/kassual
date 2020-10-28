@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kassual/bloc/cart_bloc/cart_bloc.dart';
 import 'package:kassual/config/theme.dart';
-import 'package:kassual/models/home_screen/home_screen_bloc.dart';
+import 'package:kassual/bloc/home_screen/home_screen_bloc.dart';
 import 'package:kassual/models/product/product.dart';
-import 'package:kassual/ui/cart/cart_screen.dart';
 import 'package:kassual/ui/product/product_screen.dart';
 
 class ProductCard extends StatelessWidget {
@@ -71,7 +70,7 @@ class ProductCard extends StatelessWidget {
       child: OutlineButton.icon(
         onPressed: () {
           CartBloc.of(context).add(CartEventAddProduct(product));
-          HomeScreenBloc.of(context).add(HomeScreenSetIndex(2));
+          HomeScreenBloc.of(context).add(HomeScreenSetScreen(2));
         },
         icon: SvgPicture.asset("assets/images/bag_outline_black.svg"),
         label: Text("Add to cart"),
@@ -96,9 +95,9 @@ class ProductCard extends StatelessWidget {
   }
 
   buildImage() {
-    return Hero(
-      //todo change to product id
-      tag: product.image,
+    return Image.network(product.image);
+    Hero(
+      tag: product.id,
       child: Image.network(product.image),
     );
   }

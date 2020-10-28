@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:kassual/bloc/user_bloc/user_bloc.dart';
+import 'package:kassual/config/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
+  final String error;
+
+  const LoginScreen({Key key, this.error}) : super(key: key);
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -9,7 +14,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool login = true;
 
-  TextEditingController name = TextEditingController();
+  // TextEditingController name = TextEditingController();
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController email = TextEditingController();
@@ -58,32 +63,48 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         SizedBox(height: 20),
-        if (login) ...[
-          TextField(
-            decoration: inputDecoration("Name"),
-          )
-        ],
+        Text(
+          widget.error ?? "",
+          textAlign: TextAlign.center,
+          style: AppTheme.errorTextStyle,
+        ),
+        TextField(
+          decoration: inputDecoration("Email"),
+          controller: email,
+        ),
+        SizedBox(height: 20),
         if (!login) ...[
           TextField(
+            controller: firstName,
             decoration: inputDecoration("First Name"),
           ),
           SizedBox(height: 20),
           TextField(
+            controller: lastName,
             decoration: inputDecoration("Last Name"),
           ),
           SizedBox(height: 20),
-          TextField(
-            decoration: inputDecoration("Email"),
-          ),
         ],
         SizedBox(height: 20),
         TextField(
           obscureText: true,
+          controller: password,
           decoration: inputDecoration("Password"),
         ),
         SizedBox(height: 20),
         RaisedButton(
-          onPressed: () {},
+          onPressed: login
+              ? () {
+                  UserBloc.of(context).add(UELogin(email.text, password.text));
+                }
+              : () {
+                  UserBloc.of(context).add(UESignIn(
+                    lastName: lastName.text,
+                    firstName: firstName.text,
+                    email: email.text,
+                    password: password.text,
+                  ));
+                },
           child: Text(login ? "LOGIN" : "SIGN UP"),
           colorBrightness: Brightness.dark,
         ),
@@ -101,7 +122,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: FlatButton(
                           onPressed: () {
                             launch(
-                                "https://kassual.com/account/login/#recover");
+                              "https://kassual.com/account/login/#recover",
+                            );
                           },
                           child: Text("Forget Password"),
                         ),

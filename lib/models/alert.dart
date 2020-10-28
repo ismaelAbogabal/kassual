@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AlertModel {
-  AlertModel._();
-
-  static Future<bool> confirm(
-      {BuildContext context, String title, String body}) async {
+  static Future<bool> confirm({
+    BuildContext context,
+    String title,
+    String body,
+  }) async {
     bool val = await showDialog<bool>(
       context: context,
       builder: (context) {
@@ -13,16 +14,13 @@ class AlertModel {
           content: Text(body ?? ""),
           actions: [
             FlatButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.pop(context),
               child: Text("Cancel"),
             ),
             RaisedButton(
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
+              onPressed: () => Navigator.pop(context, true),
               child: Text("Ok"),
+              colorBrightness: Brightness.dark,
             ),
           ],
         );

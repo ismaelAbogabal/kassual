@@ -1,4 +1,4 @@
-import 'package:kassual/models/cart/shipping_meyhod.dart';
+import 'package:kassual/models/cart/shipping_method.dart';
 
 List<ShippingMethod> shippingList = [
   ShippingMethod(

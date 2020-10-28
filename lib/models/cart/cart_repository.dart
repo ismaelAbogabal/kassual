@@ -1,34 +1,43 @@
+import 'package:flutter_simple_shopify/flutter_simple_shopify.dart'
+    hide Product;
+
 import 'package:kassual/models/product/product.dart';
 
-import 'cart.dart';
-
 class CartRepository {
-  final Cart cart;
+  final Checkout checkout;
 
-  const CartRepository(this.cart);
+  CartRepository(this.checkout);
 
-  Future<Cart> addProduct(Product product) async {
-    int val = cart.products[product] ?? 0;
-    cart.products[product] = val + 1;
-    return cart;
-  }
-
-  Future<Cart> removeProduct(Product product) async {
-    cart.products.remove(product);
-    return cart;
-  }
-
-  Future<Cart> addDiscount(String discountCode) async {
-    return Cart(
-      discountCode: discountCode,
-      products: cart.products,
-    );
-  }
-
-  Future<Cart> changeCount(Product product, int count) async {
-    if (cart.products[product] != null) {
-      cart.products[product] = count;
+  static Future<Checkout> init(ShopifyUser user, [String id]) async {
+    id ??= user.lastIncompleteCheckout?.id;
+    if (id == null) {
+      id = await ShopifyCheckout.instance.createCheckout();
     }
-    return cart;
+
+    return ShopifyCheckout.instance
+        .getCheckoutInfoQuery(id, deleteThisPartOfCache: true);
+  }
+
+  Future<Checkout> addProduct(Product product) async {
+    ShopifyCheckout.instance.checkoutLineItemsReplace(
+      checkout.id,
+      checkout.lineItems.lineItemList.map((e) => e.variant.id).toList(),
+      deleteThisPartOfCache: true,
+    );
+
+    return init(null, checkout.id);
+  }
+
+  Future<Checkout> removeProduct(Product product) async {
+    return checkout;
+  }
+
+  Future<Checkout> addDiscount(String discount) async {
+    //todo add discount
+    return checkout;
+  }
+
+  Future<Checkout> changeCount(Product product, int count) async {
+    return checkout;
   }
 }

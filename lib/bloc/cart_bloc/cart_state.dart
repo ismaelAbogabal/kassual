@@ -6,7 +6,7 @@ abstract class CartState {}
 class CartStateLoading extends CartState {}
 
 class CartStateLoaded extends CartState {
-  final Cart cart;
+  final Checkout cart;
 
   CartStateLoaded(this.cart);
 }
