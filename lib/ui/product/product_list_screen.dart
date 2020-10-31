@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_shopify/models/src/product.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kassual/models/product/filter.dart';
-import 'package:kassual/models/product/product.dart';
 import 'package:kassual/models/product/products_repository.dart';
 import 'package:kassual/ui/product/product_card.dart';
 import 'package:kassual/ui/widgets/app_bar.dart';
@@ -25,13 +25,6 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
 
   @override
   void initState() {
-    // scrollController.addListener(() {
-    //   if (!gettingData &&
-    //       scrollController.position.maxScrollExtent - scrollController.offset <
-    //           100) {
-    //     getProducts();
-    //   }
-    // });
     getProducts();
     super.initState();
   }
@@ -59,7 +52,7 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
       });
       products ??= [];
       setState(() {
-        products.addAll(_products);
+        products.addAll(_products ?? []);
         gettingData = false;
       });
     }
@@ -109,8 +102,6 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
           mainAxisSpacing: 10,
           crossAxisCount: 2,
           children: products.map<Widget>((e) {
-            if (products.last == e) {
-            }
             return ProductCard(product: e);
           }).toList()),
     );

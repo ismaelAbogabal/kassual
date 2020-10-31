@@ -3,29 +3,26 @@ part of 'cart_bloc.dart';
 @immutable
 abstract class CartEvent {}
 
-class CartEventInit extends CartEvent {
-  final ShopifyUser user;
-
-  CartEventInit(this.user);
-}
+class CartEventInit extends CartEvent {}
 
 class CartEventAddProduct extends CartEvent {
-  final Product product;
+  final String variantId;
+  final BuildContext context;
 
-  CartEventAddProduct(this.product);
+  CartEventAddProduct(this.variantId, this.context);
 }
 
 class CartEventRemoveProduct extends CartEvent {
-  final Product product;
+  final String variantId;
 
-  CartEventRemoveProduct(this.product);
+  CartEventRemoveProduct(this.variantId);
 }
 
 class CartEventChangeCount extends CartEvent {
-  final Product product;
+  final String variantId;
   final int count;
 
-  CartEventChangeCount(this.product, this.count);
+  CartEventChangeCount(this.variantId, this.count);
 }
 
 class CartEventSetDiscount extends CartEvent {

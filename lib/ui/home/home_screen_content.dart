@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kassual/models/product/collections.dart';
 import 'package:kassual/models/product/filter.dart';
-import 'package:kassual/models/product/products_repository.dart';
 import 'package:kassual/ui/product/product_card.dart';
 import 'package:kassual/ui/product/product_list_screen.dart';
 import 'package:kassual/ui/widgets/app_bar.dart';
@@ -72,7 +71,9 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
             child: ListView(
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              children: c.products.map((e) => ProductCard(product: e)).toList(),
+              children: c.products.productList
+                  .map((e) => ProductCard(product: e))
+                  .toList(),
             ),
           ),
           Divider(),

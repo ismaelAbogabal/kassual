@@ -65,9 +65,8 @@ class CartItemWidget extends StatelessWidget {
     return IconButton(
         icon: Icon(Icons.add_circle_outline),
         onPressed: () {
-          // CartBloc.of(_context).add(
-          //   CartEventChangeCount(item, count + 1),
-          // );
+          CartBloc.of(_context)
+              .add(CartEventAddProduct(item.variant.id, _context));
         });
   }
 
@@ -75,10 +74,9 @@ class CartItemWidget extends StatelessWidget {
     return IconButton(
       icon: Icon(Icons.remove_circle_outline),
       onPressed: () {
-        // if (count > 1)
-        //   CartBloc.of(_context).add(
-        //     CartEventChangeCount(item, count - 1),
-        //   );
+        CartBloc.of(_context).add(
+          CartEventChangeCount(item.variant.id, item.quantity - 1),
+        );
       },
     );
   }
@@ -93,7 +91,7 @@ class CartItemWidget extends StatelessWidget {
         );
 
         if (confirm) {
-          // CartBloc.of(context).add(CartEventRemoveProduct(item));
+          CartBloc.of(context).add(CartEventRemoveProduct(item.variant.id));
         }
       },
       child: Container(

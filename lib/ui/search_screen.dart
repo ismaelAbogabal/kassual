@@ -5,13 +5,18 @@ import 'package:kassual/models/product/filter.dart';
 import 'package:kassual/ui/product/product_list_screen.dart';
 import 'package:kassual/ui/widgets/search_bar.dart';
 
-const menCollectionId = "188587475084";
-const menEyeglassesCollectionId = "179191120012";
-const menSunglassesCollectionId = "181772583052";
+const menCollectionId = r"Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzE4ODU4NzQ3NTA4NA==";
+const menEyeglassesCollectionId =
+    r"Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzE3OTE5MTEyMDAxMg==";
+const menSunglassesCollectionId =
+    r"Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzE4MTc3MjU4MzA1Mg==";
 
-const womenCollectionId = "188587507852";
-const womenEyeglassesCollectionId = "181776253068";
-const womenSunglassesCollectionId = "181772943500";
+const womenCollectionId =
+    r"Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzE4ODU4NzUwNzg1Mg==";
+const womenEyeglassesCollectionId =
+    r"Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzE4MTc3NjI1MzA2OA==";
+const womenSunglassesCollectionId =
+    r"Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzE4MTc3Mjk0MzUwMA==";
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -21,7 +26,6 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
-  bool searching = false;
 
   bool get men => _controller.value < .5;
 
@@ -51,7 +55,7 @@ class _SearchScreenState extends State<SearchScreen>
         physics: BouncingScrollPhysics(),
         children: [
           SearchBar(search: (v) {
-            openProductsListScreen(title: v);
+            if (v.isNotEmpty) openProductsListScreen(title: v);
           }),
           backButton(),
           images(),
@@ -62,12 +66,12 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   void openProductsListScreen({String collectionId, String title}) {
-    // Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ProductLisScreen(
-            filter: Filter(collectionId: collectionId, title: title)),
+          filter: Filter(collectionId: collectionId, title: title),
+        ),
       ),
     );
   }

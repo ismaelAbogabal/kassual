@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:kassual/bloc/cart_bloc/cart_bloc.dart';
-import 'package:kassual/models/cart/cart.dart';
 import 'package:kassual/bloc/home_screen/home_screen_bloc.dart';
 import 'package:kassual/ui/cart/cart_empty.dart';
 import 'package:kassual/ui/cart/cart_item.dart';
 import 'package:kassual/ui/cart/cart_stepper_widget.dart';
-import 'package:kassual/ui/cart/check_out_screen.dart';
 import 'package:kassual/ui/widgets/app_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -44,10 +43,15 @@ class CartScreen extends StatelessWidget {
               child: Text("Shopping Bag"),
             ),
             SizedBox(height: 20),
-            for (var p in cart.lineItems.lineItemList)
-              CartItemWidget(item: p),
+            for (var p in cart.lineItems.lineItemList) CartItemWidget(item: p),
             SizedBox(height: 10),
-            Text("Total ${cart.totalPriceV2.formattedPrice}\$"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Total ${cart.totalPriceV2.formattedPrice}\$"),
+                Text("Drag items to remove < --"),
+              ],
+            ),
             Align(
               alignment: Alignment.bottomLeft,
               child: TextButton.icon(
@@ -58,12 +62,7 @@ class CartScreen extends StatelessWidget {
               ),
             ),
             RaisedButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddressScreen(),
-                ),
-              ),
+              onPressed: () => launch(cart.webUrl),
               color: Colors.brown,
               colorBrightness: Brightness.dark,
               child: Text("PROCEED CHECK OUT"),

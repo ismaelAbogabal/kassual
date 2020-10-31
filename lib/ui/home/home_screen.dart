@@ -2,13 +2,11 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:kassual/bloc/home_screen/home_screen_bloc.dart';
 import 'package:kassual/bloc/user_bloc/user_bloc.dart';
 import 'package:kassual/config/theme.dart';
-import 'package:kassual/models/product/collections.dart';
 import 'package:kassual/ui/authentication/authentication_screen.dart';
-import 'package:kassual/ui/authentication/login_screen.dart';
 import 'package:kassual/ui/cart/cart_screen.dart';
 import 'package:kassual/ui/home/home_screen_content.dart';
 import 'package:kassual/ui/search_screen.dart';
@@ -37,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  //todo will pop scope
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

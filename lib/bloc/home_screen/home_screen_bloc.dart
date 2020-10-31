@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kassual/models/product/collections.dart';
+import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:kassual/models/product/products_repository.dart';
 import 'package:meta/meta.dart';
 

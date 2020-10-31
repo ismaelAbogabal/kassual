@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kassual/bloc/cart_bloc/cart_bloc.dart';
 import 'package:kassual/config/theme.dart';
 import 'package:kassual/bloc/home_screen/home_screen_bloc.dart';
-import 'package:kassual/models/product/product.dart';
 import 'package:kassual/ui/product/product_screen.dart';
 
 class ProductCard extends StatelessWidget {
@@ -38,20 +38,22 @@ class ProductCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (!product.available) buildTopButton(),
+        if (!product.availableForSale) buildTopButton(),
         Expanded(
           child: buildImage(),
         ),
         Text(
-          product.brande,
+          product.vendor,
           style: TextStyle(
             color: Colors.black.withAlpha(180),
             fontSize: 16,
           ),
         ),
-        Text(product.name),
+        Text(product.title),
         buildPrice(),
-        product.available ? buildAddtoCartButton(context) : buildOutOfStock(),
+        product.availableForSale
+            ? buildAddtoCartButton(context)
+            : buildOutOfStock(),
       ],
     );
   }
@@ -69,7 +71,11 @@ class ProductCard extends StatelessWidget {
       fit: BoxFit.scaleDown,
       child: OutlineButton.icon(
         onPressed: () {
-          CartBloc.of(context).add(CartEventAddProduct(product));
+          if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
+          CartBloc.of(context).add(
+              CartEventAddProduct(product.productVariants.first.id, context));
           HomeScreenBloc.of(context).add(HomeScreenSetScreen(2));
         },
         icon: SvgPicture.asset("assets/images/bag_outline_black.svg"),
@@ -83,23 +89,22 @@ class ProductCard extends StatelessWidget {
       text: TextSpan(
         style: TextStyle(color: Colors.black, fontSize: 18),
         children: [
-          if (product.realPrice != product.sellPrice)
+          if (product.productVariants.first?.price?.amount !=
+              product.productVariants.first?.compareAtPrice?.amount)
             TextSpan(
-              text: "\$ ${product.realPrice}",
+              text:
+                  "\$ ${product.productVariants.first?.compareAtPrice?.amount ?? ""}",
               style: AppTheme.discountedTextStyle,
             ),
-          TextSpan(text: "  \$ ${product.sellPrice}"),
+          TextSpan(
+              text: "  \$ ${product.productVariants.first?.price?.amount}"),
         ],
       ),
     );
   }
 
   buildImage() {
-    return Image.network(product.image);
-    Hero(
-      tag: product.id,
-      child: Image.network(product.image),
-    );
+    return Image.network(product.images.first.originalSource);
   }
 
   buildTopButton() {

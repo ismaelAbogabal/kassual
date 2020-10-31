@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:kassual/bloc/cart_bloc/cart_bloc.dart';
+import 'package:kassual/bloc/home_screen/home_screen_bloc.dart';
 import 'package:kassual/config/theme.dart';
-import 'package:kassual/models/product/product.dart';
-import 'package:kassual/ui/cart/cart_screen.dart';
-import 'package:kassual/ui/widgets/for_items_list.dart';
 
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,7 +27,7 @@ class _ProductScreenState extends State<ProductScreen> {
           images(),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(widget.product.name),
+            child: Text(widget.product.title),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -36,12 +35,16 @@ class _ProductScreenState extends State<ProductScreen> {
               text: TextSpan(
                 style: TextStyle(color: Colors.black, fontSize: 18),
                 children: [
-                  if (widget.product.realPrice != widget.product.sellPrice)
+                  if (widget.product.productVariants.first.price.amount !=
+                      widget.product.productVariants.first.price.amount)
                     TextSpan(
-                      text: "\$ ${widget.product.realPrice}",
+                      text:
+                          "\$ ${widget.product.productVariants.first?.compareAtPrice?.amount}",
                       style: AppTheme.discountedTextStyle,
                     ),
-                  TextSpan(text: "  \$ ${widget.product.sellPrice}"),
+                  TextSpan(
+                      text:
+                          "  \$ ${widget.product.productVariants.first?.price?.amount}"),
                 ],
               ),
             ),
@@ -50,15 +53,17 @@ class _ProductScreenState extends State<ProductScreen> {
             padding: const EdgeInsets.all(8.0),
             child: RaisedButton(
               colorBrightness: Brightness.dark,
-              onPressed: !widget.product.available
+              onPressed: !widget.product.availableForSale
                   ? null
                   : () {
-                      CartBloc.of(context)
-                          .add(CartEventAddProduct(widget.product));
-                      Navigator.pushReplacement(
+                      HomeScreenBloc.of(context).add(HomeScreenSetScreen(2));
+                      CartBloc.of(context).add(
+                        CartEventAddProduct(
+                          widget.product.productVariants.first.id,
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => CartScreen()));
+                        ),
+                      );
+                      Navigator.pop(context);
                     },
               child: Text("ADD TO CART"),
             ),
@@ -66,49 +71,12 @@ class _ProductScreenState extends State<ProductScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: HtmlWidget(
-              widget.product.description,
+              widget.product.descriptionHtml,
               onTapUrl: (u) => launch(u),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  int expandedIndex;
-
-  ExpansionPanelList buildExpansionPanelList() {
-    return ExpansionPanelList(
-      expansionCallback: (panelIndex, isExpanded) {
-        setState(() {
-          if (!isExpanded) {
-            expandedIndex = panelIndex;
-          } else {
-            expandedIndex = null;
-          }
-        });
-      },
-      children: [
-        ExpansionPanel(
-          canTapOnHeader: true,
-          headerBuilder: (context, isExpanded) => ListTile(title: Text("Size")),
-          isExpanded: expandedIndex == 0,
-          body: detailsSection(),
-        ),
-        ExpansionPanel(
-          canTapOnHeader: true,
-          headerBuilder: (context, isExpanded) =>
-              ListTile(title: Text("Description")),
-          isExpanded: expandedIndex == 1,
-          body: HtmlWidget(
-            widget.product.description,
-          ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Text(widget.product.description),
-          // ),
-        ),
-      ],
     );
   }
 
@@ -118,36 +86,11 @@ class _ProductScreenState extends State<ProductScreen> {
       child: Hero(
         tag: widget.product.id,
         child: PageView(
-          children: widget.product.images.map((e) => Image.network(e)).toList(),
+          children: widget.product.images
+              .map((e) => Image.network(e.originalSource))
+              .toList(),
         ),
       ),
     );
-  }
-
-  final padding = 20.0;
-
-  detailsSection() {
-    return ForItemsList(children: [
-      Item(
-        title: "Length Width",
-        data: "${widget.product.lengthWidth}",
-        image: Image.asset("assets/images/size/width.jpg"),
-      ),
-      Item(
-        title: "Length Height",
-        data: "${widget.product.lengthHeight}",
-        image: Image.asset("assets/images/size/height.jpg"),
-      ),
-      Item(
-        title: "Temple",
-        data: "${widget.product.temple}",
-        image: Image.asset("assets/images/size/temple.jpg"),
-      ),
-      Item(
-        title: "Bridge",
-        data: "${widget.product.bridge}",
-        image: Image.asset("assets/images/size/bridge.jpg"),
-      ),
-    ]);
   }
 }

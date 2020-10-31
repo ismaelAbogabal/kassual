@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:kassual/bloc/user_bloc/user_bloc.dart';
 import 'package:kassual/ui/authentication/address_adder_screen.dart';
+import 'package:kassual/ui/cart/orders_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final ShopifyUser user;
@@ -21,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   void initState() {
-    controller = TabController(vsync: this, length: 3);
+    controller = TabController(vsync: this, length: 2);
     super.initState();
   }
 
@@ -34,7 +35,6 @@ class _ProfileScreenState extends State<ProfileScreen>
         children: [
           detailsTab(),
           addressScreen(),
-          Placeholder(),
         ],
       ),
     );
@@ -49,7 +49,6 @@ class _ProfileScreenState extends State<ProfileScreen>
         tabs: [
           Tab(text: "Details"),
           Tab(text: "Addresses"),
-          Tab(text: "History"),
         ],
       ),
     );
@@ -99,11 +98,8 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
         Divider(),
         ListTile(
-          title: Text("Address"),
-          subtitle: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Text(formattedAddress(widget.user.address.addressList[0])),
-          ),
+          title: Text("Orders"),
+          onTap: openOrdersScreen,
         ),
         Divider(),
         ListTile(
@@ -143,7 +139,6 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   Widget addressScreen() {
-    final address = widget.user.address.addressList[0];
     return ListView(
       children: [
         ...widget.user.address.addressList.map((e) => addressData(e)).toList(),
@@ -223,6 +218,15 @@ class _ProfileScreenState extends State<ProfileScreen>
       context,
       MaterialPageRoute(
         builder: (context) => AddressAdderScreen(address: address),
+      ),
+    );
+  }
+
+  void openOrdersScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OrdersScreen(),
       ),
     );
   }

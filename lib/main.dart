@@ -1,8 +1,8 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
+import 'package:kassual/bloc/home_screen/home_screen_bloc.dart';
 import 'package:kassual/bloc/user_bloc/user_bloc.dart';
 import 'package:kassual/config/theme.dart';
 import 'package:kassual/models/api/api.dart';
@@ -16,6 +16,7 @@ main() async {
     "df602872e2c405e672b32937ec4ab0f9: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@overstockauthentics.myshopify.com",
     "2020-10",
   );
+
   runApp(MyApp());
 }
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider.value(value: userBloc),
         BlocProvider.value(value: CartBloc(userBloc)),
+        BlocProvider.value(value: HomeScreenBloc()),
       ],
       child: MaterialApp(
         title: "KASSUAL",
@@ -36,6 +38,4 @@ class MyApp extends StatelessWidget {
     );
     userBloc.close();
   }
-
-  void test() async {}
 }

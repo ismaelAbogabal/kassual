@@ -2,7 +2,7 @@
     package="com.faster.ismael.kassual">
    <application
         android:label="kassual"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@drawable/kassual_logo">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
