@@ -32,17 +32,16 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
     );
   }
 
+  List<String> get images => widget.collections
+          .where((element) => element.image?.originalSource != null)
+          .map((e) => e.image.originalSource)
+          .toList();
+
   ListView buildBody() {
     return ListView(
       physics: BouncingScrollPhysics(),
       children: [
-        TopBanner(
-          images: [
-            "https://www.marketingtochina.com/wp-content/uploads/2018/07/Bolon-sunglasses-1024x608.png",
-            "https://image.shutterstock.com/image-photo/portrait-men-sunglasses-260nw-372742225.jpg",
-            "https://hdwallpaperim.com/wp-content/uploads/2017/08/26/183573-women-model-brunette-long_hair-Black_clothes-tattoo-sunglasses-women_outdoors-walls-sunlight-tank_top.jpg",
-          ],
-        ),
+        TopBanner(images: images),
         for (var c in widget.collections) ...[
           Padding(
             padding: const EdgeInsets.all(8.0),

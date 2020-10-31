@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
@@ -6,6 +5,7 @@ import 'package:kassual/bloc/home_screen/home_screen_bloc.dart';
 import 'package:kassual/bloc/user_bloc/user_bloc.dart';
 import 'package:kassual/config/theme.dart';
 import 'package:kassual/models/api/api.dart';
+import 'package:kassual/models/product/products_repository.dart';
 import 'package:kassual/ui/home/home_screen.dart';
 
 import 'bloc/cart_bloc/cart_bloc.dart';

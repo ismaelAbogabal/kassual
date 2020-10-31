@@ -26,6 +26,13 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
   @override
   void initState() {
     getProducts();
+    scrollController.addListener(() {
+      if (!gettingData &&
+          scrollController.offset ==
+              scrollController.position.maxScrollExtent) {
+        getProducts();
+      }
+    });
     super.initState();
   }
 
@@ -34,9 +41,17 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
       gettingData = true;
     });
     if (widget.filter.collectionId != null) {
-      products = await ProductRepository.collectionProducts(
+      products ??= [];
+
+      var _products = await ProductRepository.collectionProducts(
         widget.filter.collectionId,
+        _lastProductCursor,
+        20,
       );
+      print(_products);
+      products.addAll(_products ?? []);
+      _lastProductCursor = products.last.cursor;
+
       setState(() {
         gettingData = false;
       });
@@ -65,7 +80,11 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
         controller: scrollController,
         physics: BouncingScrollPhysics(),
         slivers: [
-          SliverAppBar(title: Text("KASSUAL")),
+          SliverAppBar(
+            title: Text("KASSUAL"),
+            floating: true,
+            backgroundColor: Colors.white,
+          ),
           SliverGrid.count(
               childAspectRatio: .5,
               crossAxisSpacing: 10,

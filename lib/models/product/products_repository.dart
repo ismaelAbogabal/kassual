@@ -1,24 +1,40 @@
-import 'package:flutter_simple_shopify/enums/src/sort_key_collection.dart';
 import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:flutter_simple_shopify/models/src/product.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:kassual/models/product/filter.dart';
+import 'package:kassual/models/product/get_collections_query.dart';
 
 class ProductRepository {
   static Future<List<Collection>> getAllCollections() async {
-     var categories =
-        await ShopifyStore.instance.getXCollectionsAndNProductsSorted(
-      7,
-      13,
-      sortKeyCollection: SortKeyCollection.RELEVANCE,
+    List<Collection> collectionList;
+    WatchQueryOptions _options = WatchQueryOptions(
+      documentNode: gql(getAllCollectionQuery),
     );
 
-    categories.removeWhere((element) => element.products.productList.isEmpty);
+    final QueryResult result =
+        await ShopifyConfig.graphQLClient.query(_options);
 
-    return categories;
+    if (result.hasException) throw Exception(result.exception.toString());
+
+    collectionList = (Collections.fromJson(
+      (result?.data ?? const {})['collections'] ?? {},
+    )).collectionList;
+
+    collectionList
+        .removeWhere((element) => element.products.productList.isEmpty);
+    return collectionList;
   }
 
-  static Future<List<Product>> collectionProducts(String collectionId) async {
-    return ShopifyStore.instance.getAllProductsFromCollectionById(collectionId);
+  static Future<List<Product>> collectionProducts(
+    String collectionId,
+    String cursor, [
+    int limit = 200,
+  ]) async {
+    return ShopifyStore.instance.getXProductsAfterCursorWithinCollection(
+      collectionId,
+      limit,
+      cursor,
+    );
   }
 
   static Future<List<Product>> productsWithFilter(

@@ -55,6 +55,9 @@ class _TopBannerState extends State<TopBanner> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.images == null || widget.images.isEmpty){
+      return Text("");
+    }
     return AspectRatio(
       aspectRatio: 1.6,
       child: Stack(

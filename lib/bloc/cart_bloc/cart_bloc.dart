@@ -13,9 +13,6 @@ import 'package:meta/meta.dart';
 part 'cart_event.dart';
 part 'cart_state.dart';
 
-///todo when there are no user
-///setup cart for no user
-///
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc(UserBloc userBloc) : super(CartStateLoading()) {
     userBloc.listen((state) {
