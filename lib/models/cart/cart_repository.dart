@@ -18,11 +18,15 @@ class CartRepository {
       );
     }
 
-    String accessToken = await ShopifyAuth.currentCustomerAccessToken;
-    if (accessToken != null) await _setUpCheckoutWithUser(id, accessToken);
+    try {
+      var accessToken = await ShopifyAuth.currentCustomerAccessToken;
+      if (accessToken != null) await _setUpCheckoutWithUser(id, accessToken);
+    } catch (e) {}
 
-    var checkout = await ShopifyCheckout.instance
-        .getCheckoutInfoQuery(id, deleteThisPartOfCache: true);
+    var checkout = await ShopifyCheckout.instance.getCheckoutInfoQuery(
+      id,
+      deleteThisPartOfCache: true,
+    );
     return checkout;
   }
 
