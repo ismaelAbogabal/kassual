@@ -8,8 +8,13 @@ import 'package:kassual/ui/product/product_screen.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
+  final bool withHero;
 
-  const ProductCard({Key key, @required this.product}) : super(key: key);
+  const ProductCard({
+    Key key,
+    @required this.product,
+    this.withHero = false,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -52,7 +57,7 @@ class ProductCard extends StatelessWidget {
         Text(product.title),
         buildPrice(),
         product.availableForSale
-            ? buildAddtoCartButton(context)
+            ? buildAddToCartButton(context)
             : buildOutOfStock(),
       ],
     );
@@ -66,7 +71,7 @@ class ProductCard extends StatelessWidget {
     );
   }
 
-  buildAddtoCartButton(BuildContext context) {
+  buildAddToCartButton(BuildContext context) {
     return FittedBox(
       fit: BoxFit.scaleDown,
       child: OutlineButton.icon(
@@ -104,7 +109,15 @@ class ProductCard extends StatelessWidget {
   }
 
   buildImage() {
-    return Image.network(product.images.first.originalSource);
+    Widget image = Image.network(product.images.first.originalSource);
+    if (withHero) {
+      image = Hero(
+        tag: product.id,
+        child: image,
+      );
+    }
+
+    return image;
   }
 
   buildTopButton() {

@@ -48,7 +48,6 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
         _lastProductCursor,
         20,
       );
-      print(_products);
       products.addAll(_products ?? []);
       _lastProductCursor = products.last.cursor;
 
@@ -91,7 +90,7 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
               mainAxisSpacing: 10,
               crossAxisCount: 2,
               children: (products ?? [])
-                  .map<Widget>((e) => ProductCard(product: e))
+                  .map<Widget>((e) => ProductCard(product: e, withHero: true))
                   .toList()),
           SliverToBoxAdapter(
             child: Container(

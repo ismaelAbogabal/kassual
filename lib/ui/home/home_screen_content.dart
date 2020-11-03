@@ -33,9 +33,9 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
   }
 
   List<String> get images => widget.collections
-          .where((element) => element.image?.originalSource != null)
-          .map((e) => e.image.originalSource)
-          .toList();
+      .where((element) => element.image?.originalSource != null)
+      .map((e) => e.image.originalSource)
+      .toList();
 
   ListView buildBody() {
     return ListView(

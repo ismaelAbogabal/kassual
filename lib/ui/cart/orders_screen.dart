@@ -15,7 +15,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   void initState() {
     CartRepository.allOrders().then((value) => setState(() => orders = value));
-    super.initState();
   }
 
   @override

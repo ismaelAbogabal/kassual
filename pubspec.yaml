@@ -25,7 +25,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  dots_indicator: ^1.2.0
+  smooth_page_indicator: ^0.2.0
   flutter_svg: ^0.19.1
 
   badges: ^1.1.4
@@ -38,7 +38,7 @@ dependencies:
   flutter_spinkit: ^4.1.2+1
 
   flutter_widget_from_html_core: ^0.5.1+3
-  animated_text_kit: ^2.5.1
+  animated_text_kit: ^2.5.3
 
   graphql: ^3.1.0
 
@@ -89,7 +89,7 @@ flutter:
     - family: krona
       fonts:
         - asset: assets/fonts/krona/KronaOne-Regular.ttf
-    - family: "noto"
+    - family: noto
       fonts:
         - asset: assets/fonts/noto/NotoSansJP-Regular.otf
 

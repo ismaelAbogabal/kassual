@@ -70,7 +70,6 @@ class CartRepository {
       variantList,
       deleteThisPartOfCache: true,
     );
-
     return await init(checkout.id);
   }
 
@@ -106,8 +105,8 @@ class CartRepository {
 
   static Future<List<Order>> allOrders() async {
     try {
-      String accesToken = await ShopifyAuth.currentCustomerAccessToken;
-      return ShopifyCheckout.instance.getAllOrders(accesToken);
+      String accessToken = await ShopifyAuth.currentCustomerAccessToken;
+      return ShopifyCheckout.instance.getAllOrders(accessToken);
     } catch (e) {}
   }
 }

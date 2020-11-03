@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class TopBanner extends StatefulWidget {
   final List<String> images;
@@ -14,21 +14,13 @@ class TopBanner extends StatefulWidget {
 
 class _TopBannerState extends State<TopBanner> {
   PageController controller;
-  double position = 0;
   StreamSubscription stream;
 
   bool _autoMovementKeepPeriod = false;
 
-  void changeListener() {
-    setState(() {
-      position = controller.page;
-    });
-  }
-
   @override
   void initState() {
     controller = PageController();
-    controller.addListener(changeListener);
 
     stream = Stream.periodic(Duration(seconds: 5)).listen((event) {
       if (_autoMovementKeepPeriod) {
@@ -48,14 +40,13 @@ class _TopBannerState extends State<TopBanner> {
 
   @override
   void dispose() {
-    controller.removeListener(dispose);
     stream.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if(widget.images == null || widget.images.isEmpty){
+    if (widget.images == null || widget.images.isEmpty) {
       return Text("");
     }
     return AspectRatio(
@@ -69,19 +60,20 @@ class _TopBannerState extends State<TopBanner> {
                 .map((e) => Image.network(e, fit: BoxFit.cover))
                 .toList(),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: DotsIndicator(
-              dotsCount: widget.images.length,
-              position: position,
-              onTap: (val) {
-                _autoMovementKeepPeriod = true;
-                controller.animateToPage(
-                  val.ceil(),
-                  duration: Duration(seconds: 1),
-                  curve: Curves.easeInOut,
-                );
-              },
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: SmoothPageIndicator(
+                controller: controller,
+                count: widget.images.length,
+                effect: ScrollingDotsEffect(
+                  fixedCenter: true,
+                  radius: 5,
+                  dotColor: Colors.brown[200],
+                  activeDotColor: Colors.brown[300],
+                ),
+              ),
             ),
           ),
         ],

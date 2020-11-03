@@ -69,4 +69,8 @@ class ProductRepository {
       return true;
     }).toList();
   }
+
+  static Future<List<Product>> recommendationProducts(String productId) async {
+    return ShopifyStore.instance.getProductRecommendations(productId);
+  }
 }
