@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_shopify/models/src/product.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kassual/models/product/filter.dart';
 import 'package:kassual/models/product/products_repository.dart';
 import 'package:kassual/ui/product/product_card.dart';
 import 'package:kassual/ui/widgets/app_bar.dart';
+import 'package:kassual/ui/widgets/loading_widget.dart';
 
 class ProductLisScreen extends StatefulWidget {
   final Filter filter;
@@ -75,41 +75,43 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        controller: scrollController,
-        physics: BouncingScrollPhysics(),
-        slivers: [
-          SliverAppBar(
-            title: Text("KASSUAL"),
-            floating: true,
-            backgroundColor: Colors.white,
-          ),
-          SliverGrid.count(
-              childAspectRatio: .5,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              crossAxisCount: 2,
-              children: (products ?? [])
-                  .map<Widget>((e) => ProductCard(product: e, withHero: true))
-                  .toList()),
-          SliverToBoxAdapter(
-            child: Container(
-              width: double.infinity,
-              height: 50,
-              child: gettingData
-                  ? SpinKitFoldingCube(color: Colors.brown[300])
-                  : null,
+      body: products == null || (products.isEmpty && gettingData)
+          ? Container(
+              height: MediaQuery.of(context).size.height,
+              child: LoadingWidget(),
+            )
+          : CustomScrollView(
+              controller: scrollController,
+              physics: BouncingScrollPhysics(),
+              slivers: [
+                KAppBar(),
+                SliverGrid.count(
+                    childAspectRatio: .5,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    crossAxisCount: 2,
+                    children: (products ?? [])
+                        .map<Widget>(
+                            (e) => ProductCard(product: e, withHero: true))
+                        .toList()),
+                SliverToBoxAdapter(
+                  child: Container(
+                    width: double.infinity,
+                    height: 50,
+                    child: gettingData
+                        ? LoadingWidget()
+                        : null,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 
   NestedScrollView buildNestedScrollView() {
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) => [
-        KAppBar(title: "KASSUAL"),
+        KAppBar(),
       ],
       body: GridView.count(
           controller: scrollController,

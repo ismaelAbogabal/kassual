@@ -1,129 +1,220 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kassual/models/product/filter.dart';
-import 'package:kassual/ui/product/product_card.dart';
 import 'package:kassual/ui/product/product_list_screen.dart';
+import 'package:kassual/ui/product/product_screen.dart';
+import 'package:kassual/ui/search_screen.dart';
 import 'package:kassual/ui/widgets/app_bar.dart';
-import 'package:kassual/ui/widgets/for_items_list.dart';
-import 'package:kassual/ui/widgets/top_banner.dart';
+import 'package:url_launcher/url_launcher.dart' as url;
 
 class HomeScreenContent extends StatefulWidget {
-  final List<Collection> collections;
+  final Product card;
 
-  const HomeScreenContent({Key key, this.collections}) : super(key: key);
+  const HomeScreenContent({
+    Key key,
+    this.card,
+  }) : super(key: key);
   @override
   _HomeScreenContentState createState() => _HomeScreenContentState();
 }
 
-class _HomeScreenContentState extends State<HomeScreenContent> {
+class _HomeScreenContentState extends State<HomeScreenContent>
+    with SingleTickerProviderStateMixin {
+  TabController controller;
+  ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    controller = TabController(length: 2, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // drawer: KDrawer(),
       body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) =>
-            [KAppBar(title: "KASSUAL")],
-        body: widget.collections.isEmpty
-            ? Center(child: SpinKitFoldingCube(color: Colors.brown[300]))
-            : buildBody(),
+        controller: scrollController,
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          KAppBar(pinned: false),
+          SliverAppBar(
+            toolbarHeight: 0,
+            backgroundColor: Colors.white,
+            pinned: true,
+            bottom: TabBar(
+              controller: controller,
+              isScrollable: true,
+              tabs: [
+                Tab(text: "MEN"),
+                Tab(text: "WOMEN"),
+              ],
+            ),
+          ),
+        ],
+        body: TabBarView(
+          controller: controller,
+          children: [
+            ListView(
+              children: [
+                buildCard(
+                  title: "New Arrival",
+                  subtitle: "Shop now",
+                  image:
+                      "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSHbbCmRnpl_7EdIT8sNDUqjBFWQRwfP0gg2w&usqp=CAU",
+                  route: ProductLisScreen(
+                    filter: Filter(collectionId: newArrivalCollectionId),
+                  ),
+                ),
+                buildCard(
+                  title: "Men Sunglasses",
+                  subtitle: "Shop now",
+                  image: "assets/images/home_screen/men_sun.jpg",
+                  route: ProductLisScreen(
+                    filter: Filter(collectionId: menSunglassesCollectionId),
+                  ),
+                ),
+                buildCard(
+                  title: "Men Eyeglasses",
+                  subtitle: "Shop now",
+                  image: "assets/images/home_screen/men_eye.jpg",
+                  route: ProductLisScreen(
+                    filter: Filter(collectionId: menEyeglassesCollectionId),
+                  ),
+                ),
+                card(),
+                contactInfo(),
+              ],
+            ),
+            ListView(
+              children: [
+                buildCard(
+                  title: "New Arrival",
+                  subtitle: "Shop now",
+                  image:
+                      "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSHbbCmRnpl_7EdIT8sNDUqjBFWQRwfP0gg2w&usqp=CAU",
+                  route: ProductLisScreen(
+                    filter: Filter(collectionId: newArrivalCollectionId),
+                  ),
+                ),
+                buildCard(
+                  title: "Women Sunglasses",
+                  subtitle: "Shop now",
+                  image: "assets/images/home_screen/women_sun.jpg",
+                  route: ProductLisScreen(
+                    filter: Filter(collectionId: womenSunglassesCollectionId),
+                  ),
+                ),
+                buildCard(
+                  title: "Women Eyeglasses",
+                  subtitle: "Shop now",
+                  image: "assets/images/home_screen/women_eye.jpg",
+                  route: ProductLisScreen(
+                    filter: Filter(collectionId: womenEyeglassesCollectionId),
+                  ),
+                ),
+                card(),
+                contactInfo(),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  List<String> get images => widget.collections
-      .where((element) => element.image?.originalSource != null)
-      .map((e) => e.image.originalSource)
-      .toList();
+  Widget card() {
+    return buildCard(
+      title: "Gift Card",
+      subtitle: "Shop now",
+      image: widget.card.images.first.originalSource,
+      heroTag: widget.card.id,
+      route: ProductScreen(product: widget.card),
+    );
+  }
 
-  ListView buildBody() {
-    return ListView(
-      physics: BouncingScrollPhysics(),
-      children: [
-        TopBanner(images: images),
-        for (var c in widget.collections) ...[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(c.title, style: titleText),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductLisScreen(
-                          filter: Filter(collectionId: c.id),
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text("More"),
+  Widget buildCard({
+    String image,
+    String title,
+    String subtitle,
+    String heroTag,
+    Widget route,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        if (route == null) return;
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return route;
+          },
+        ));
+      },
+      child: Card(
+        elevation: 3,
+        margin: EdgeInsets.symmetric(vertical: 8),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Hero(
+              tag: heroTag ?? image,
+              child: image.contains("assets")
+                  ? Image.asset(
+                      image,
+                      height: 200,
+                      fit: BoxFit.fill,
+                    )
+                  : Image.network(
+                      image,
+                      height: 200,
+                      fit: BoxFit.fill,
+                    ),
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  title,
+                  style: TextStyle(fontSize: 20),
                 ),
-              ],
+              ),
+            ),
+            Center(child: Text(subtitle)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  contactInfo() {
+    return ExpansionTile(
+      backgroundColor: Colors.black,
+      title: Text('Contact Us'),
+      children: [
+        ListTile(
+          leading: Icon(Icons.phone, color: Colors.white),
+          onTap: () {
+            url.launch("tel:8189133305");
+          },
+          title: Text(
+            "818-913-3305",
+            style: TextStyle(
+              color: Colors.white,
             ),
           ),
-          AspectRatio(
-            aspectRatio: 1.2,
-            child: ListView(
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              children: c.products.productList
-                  .map((e) => ProductCard(product: e))
-                  .toList(),
+        ),
+        ListTile(
+          leading: Icon(Icons.mail_outline, color: Colors.white),
+          onTap: () {
+            url.launch("mailto:info@kassual.com");
+          },
+          title: Text(
+            "Send us an email",
+            style: TextStyle(
+              color: Colors.white,
             ),
           ),
-          Divider(),
-        ],
-        detailsSection(),
-      ],
-    );
-  }
-
-  TextStyle get titleText {
-    return TextStyle(
-      color: Colors.black,
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-    );
-  }
-
-  final padding = 20.0;
-
-  detailsSection() {
-    return ForItemsList(
-      children: <Item>[
-        Item(
-          title: "Free delivery",
-          data: "All U.S.A Orders are qualified for free delivery",
-          image: SvgPicture.asset("assets/images/ship_outline.svg"),
-        ),
-        Item(
-          title: "Payment Method",
-          data:
-              "We accept: Visa, MasterCard, Discover, American Express, PayPal, ApplePay, GooglePay",
-          image: SvgPicture.asset("assets/images/credit_card.svg"),
-        ),
-        Item(
-          title: "Returns and Refunds",
-          data: "We accept returns within 30 days from delivery day",
-          image: SvgPicture.asset("assets/images/return.svg"),
-        ),
-        Item(
-          title: "Students Discount",
-          data: "Student currently enroll receive 15% discount for 1 year",
-          image: SvgPicture.asset("assets/images/discount.svg"),
         ),
       ],
-      padding: 10,
-    );
-  }
-
-  loading() {
-    return Center(
-      child: SpinKitCubeGrid(color: Colors.brown[300]),
     );
   }
 }

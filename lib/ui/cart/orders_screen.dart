@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kassual/models/cart/cart_repository.dart';
 import 'package:kassual/ui/cart/order_item.dart';
+import 'package:kassual/ui/widgets/loading_widget.dart';
 
 class OrdersScreen extends StatefulWidget {
   @override
@@ -15,13 +15,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   void initState() {
     CartRepository.allOrders().then((value) => setState(() => orders = value));
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Orders")),
-      body: orders == null ? loadingState() : loadedState(orders),
+      body: orders == null ? LoadingWidget() : loadedState(orders),
     );
   }
 
@@ -50,11 +51,5 @@ class _OrdersScreenState extends State<OrdersScreen> {
     );
   }
 
-  loadingState() {
-    return Center(
-      child: SpinKitFoldingCube(
-        color: Colors.brown[300],
-      ),
-    );
-  }
+
 }

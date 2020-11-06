@@ -1,28 +1,14 @@
 import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:flutter_simple_shopify/models/src/product.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:kassual/models/product/filter.dart';
-import 'package:kassual/models/product/get_collections_query.dart';
 
 class ProductRepository {
-  static Future<List<Collection>> getAllCollections() async {
-    List<Collection> collectionList;
-    WatchQueryOptions _options = WatchQueryOptions(
-      documentNode: gql(getAllCollectionQuery),
-    );
+  static Future<Product> getCard() async {
+    var products = await ShopifyStore.instance.getProductsByIds([
+      r"Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0LzQ5MzM1MjE4MDEzNTY=",
+    ]);
 
-    final QueryResult result =
-        await ShopifyConfig.graphQLClient.query(_options);
-
-    if (result.hasException) throw Exception(result.exception.toString());
-
-    collectionList = (Collections.fromJson(
-      (result?.data ?? const {})['collections'] ?? {},
-    )).collectionList;
-
-    collectionList
-        .removeWhere((element) => element.products.productList.isEmpty);
-    return collectionList;
+    return products.first;
   }
 
   static Future<List<Product>> collectionProducts(

@@ -9,6 +9,7 @@ import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:kassual/bloc/user_bloc/user_bloc.dart';
 import 'package:kassual/models/cart/cart_repository.dart';
 import 'package:meta/meta.dart';
+import 'package:url_launcher/url_launcher.dart' as url;
 
 part 'cart_event.dart';
 part 'cart_state.dart';
@@ -57,6 +58,16 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           event.count,
         ),
       );
+    } else if (event is CartEventProceed) {
+      var s = state as CartStateLoaded;
+      yield CartStateLoading();
+      if (event?.user?.address?.addressList?.first != null) {
+        await CartRepository(s.cart).setAddress(
+          event.user.address.addressList.first,
+        );
+      }
+      yield CartStateLoaded(s.cart);
+      url.launch(s.cart.webUrl);
     }
   }
 }

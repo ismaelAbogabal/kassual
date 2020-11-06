@@ -74,6 +74,7 @@ class ProductCard extends StatelessWidget {
   buildAddToCartButton(BuildContext context) {
     return FittedBox(
       fit: BoxFit.scaleDown,
+      alignment: Alignment.centerLeft,
       child: OutlineButton.icon(
         onPressed: () {
           if (Navigator.canPop(context)) {
@@ -126,7 +127,7 @@ class ProductCard extends StatelessWidget {
       shape: BeveledRectangleBorder(
         borderRadius: BorderRadius.circular(5),
       ),
-      backgroundColor: Colors.brown,
+      backgroundColor: Colors.black54,
       labelStyle: TextStyle(color: Colors.white),
     );
   }

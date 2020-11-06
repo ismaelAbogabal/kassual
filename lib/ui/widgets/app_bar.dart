@@ -1,31 +1,30 @@
 import 'package:flutter/material.dart';
 
 class KAppBar extends StatelessWidget {
-  final bool withIcon;
-  final String title;
+  final PreferredSizeWidget bottom;
 
-  const KAppBar({
-    Key key,
-    @required this.title,
-    this.withIcon = false,
-  }) : super(key: key);
+  final bool pinned;
+
+  KAppBar({this.bottom, this.pinned = true});
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      // title: Text("KASSUAL"),
       expandedHeight: 100,
-      elevation: 0,
-      pinned: true,
+      pinned: pinned,
       backgroundColor: Colors.white,
-      leading:
-          withIcon ? Icon(Icons.ac_unit_outlined, color: Colors.black45) : null,
+      bottom: bottom,
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.pin,
         centerTitle: true,
-        title: Text(
-          title,
-          style: Theme.of(context).appBarTheme.textTheme.headline6,
+        // title: Text(
+        //   title,
+        //   style: Theme.of(context).appBarTheme.textTheme.headline6,
+        // ),
+        title: Image.asset(
+          "assets/images/Kassual.png",
+          height: 24,
+          alignment: Alignment.center,
         ),
       ),
     );

@@ -30,3 +30,9 @@ class CartEventSetDiscount extends CartEvent {
 
   CartEventSetDiscount(this.discountCode);
 }
+
+class CartEventProceed extends CartEvent {
+  final ShopifyUser user;
+
+  CartEventProceed(this.user);
+}

@@ -11,12 +11,12 @@ part 'home_screen_event.dart';
 part 'home_screen_state.dart';
 
 class HomeScreenBloc extends Bloc<HomeScreenSetScreen, HomeScreenState> {
-  HomeScreenBloc() : super(HomeScreenState(0, [])) {
+  HomeScreenBloc() : super(HomeScreenState(0, null)) {
     init();
   }
 
   init() {
-    ProductRepository.getAllCollections().then((value) {
+    ProductRepository.getCard().then((value) {
       emit(HomeScreenState(state.index, value));
     }).catchError((e) {
       init();
@@ -30,6 +30,6 @@ class HomeScreenBloc extends Bloc<HomeScreenSetScreen, HomeScreenState> {
   Stream<HomeScreenState> mapEventToState(
     HomeScreenSetScreen event,
   ) async* {
-    yield HomeScreenState(event.index, state.collections);
+    yield HomeScreenState(event.index, state.card);
   }
 }

@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static ThemeData get theme {
     return ThemeData(
-      primarySwatch: Colors.brown,
+      primarySwatch: Colors.grey,
+
       scaffoldBackgroundColor: Colors.white,
       primaryColorBrightness: Brightness.light,
-
       appBarTheme: appBarTheme,
       textTheme: textTheme(),
+      buttonColor: Colors.red,
       buttonTheme: buttonThemeData(),
       bottomNavigationBarTheme: bottomNavigationBarThemeData(),
 
@@ -32,7 +33,7 @@ class AppTheme {
 
   static ButtonThemeData buttonThemeData() {
     return ButtonThemeData(
-      buttonColor: Colors.brown,
+      buttonColor: Colors.black87,
       padding: EdgeInsets.all(20),
       shape: BeveledRectangleBorder(
         borderRadius: BorderRadius.circular(5),

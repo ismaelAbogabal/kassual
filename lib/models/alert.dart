@@ -15,6 +15,7 @@ class AlertModel {
           actions: [
             FlatButton(
               onPressed: () => Navigator.pop(context),
+              textColor: Colors.black38,
               child: Text("Cancel"),
             ),
             RaisedButton(

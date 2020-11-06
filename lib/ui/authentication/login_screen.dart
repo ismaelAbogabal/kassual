@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kassual/bloc/user_bloc/user_bloc.dart';
 import 'package:kassual/config/theme.dart';
+import 'package:kassual/ui/widgets/app_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,8 +26,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(title: Text("KASSUAL"), toolbarHeight: 100),
-        body: buildBody(context),
+        // appBar: KAppBar(),
+        // body: buildBody(context),
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [KAppBar()],
+          body: buildBody(context),
+        ),
       ),
     );
   }
@@ -35,11 +40,13 @@ class _LoginScreenState extends State<LoginScreen> {
   buildBody(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        height ??= constraints.maxHeight;
+        height ??= constraints.maxHeight - kToolbarHeight;
         return SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Container(
-            height: height,
+            constraints: BoxConstraints(
+              minHeight: height,
+            ),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: buildItems(),

@@ -11,7 +11,7 @@ class AddressScreen extends StatelessWidget {
       // appBar: AppBar(title: Text("CHECK OUT")),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          KAppBar(title: "ADDRESS"),
+          KAppBar(),
         ],
         body: ListView(
           physics: BouncingScrollPhysics(),

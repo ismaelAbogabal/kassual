@@ -18,6 +18,9 @@ const womenEyeglassesCollectionId =
 const womenSunglassesCollectionId =
     r"Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzE4MTc3Mjk0MzUwMA==";
 
+const newArrivalCollectionId =
+    r"Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzE4ODU1NDI4MTEwMA==";
+
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -86,7 +89,6 @@ class _SearchScreenState extends State<SearchScreen>
             Transform.scale(
               scale: ((_controller.value * 2) - 1).abs(),
               child: FlatButton(
-                textColor: Colors.brown,
                 onPressed: () => openProductsListScreen(
                   collectionId: men ? menCollectionId : womenCollectionId,
                 ),
@@ -96,7 +98,6 @@ class _SearchScreenState extends State<SearchScreen>
             Transform.scale(
               scale: ((_controller.value * 2) - 1).abs(),
               child: FlatButton(
-                textColor: Colors.brown,
                 onPressed: () => openProductsListScreen(
                   collectionId: men
                       ? menSunglassesCollectionId
@@ -108,7 +109,6 @@ class _SearchScreenState extends State<SearchScreen>
             Transform.scale(
               scale: ((_controller.value * 2) - 1).abs(),
               child: FlatButton(
-                textColor: Colors.brown,
                 onPressed: () => openProductsListScreen(
                   collectionId: men
                       ? menEyeglassesCollectionId
@@ -130,7 +130,7 @@ class _SearchScreenState extends State<SearchScreen>
         alignment: Alignment.centerLeft,
         child: Transform.scale(
           scale: ((_controller.value * 2) - 1).abs(),
-          child: TextButton.icon(
+          child: FlatButton.icon(
             onPressed: () {
               _controller.animateTo(
                 .5,

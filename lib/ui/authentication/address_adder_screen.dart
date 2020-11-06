@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:kassual/bloc/user_bloc/user_bloc.dart';
+import 'package:kassual/ui/widgets/app_bar.dart';
 
 class AddressAdderScreen extends StatefulWidget {
   final Address address;
@@ -71,79 +72,81 @@ class _AddressAdderScreenState extends State<AddressAdderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Add Address")),
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.all(8.0),
-        children: [
-          TextField(
-            controller: firstName,
-            decoration: buildInputDecoration("First Name"),
-          ),
-          SizedBox(height: 8.0),
-          TextField(
-            controller: lastName,
-            decoration: buildInputDecoration("Last Name"),
-          ),
-          SizedBox(height: 8.0),
-          TextField(
-            controller: company,
-            decoration: buildInputDecoration("Company"),
-          ),
-          SizedBox(height: 8.0),
-          TextField(
-            controller: address1,
-            decoration: buildInputDecoration("Address1"),
-          ),
-          SizedBox(height: 8.0),
-          TextField(
-            controller: address2,
-            decoration: buildInputDecoration("Address2"),
-          ),
-          SizedBox(height: 8.0),
-          TextField(
-            controller: country,
-            decoration: buildInputDecoration("Country"),
-          ),
-          SizedBox(height: 8.0),
-          TextField(
-            controller: province,
-            decoration: buildInputDecoration("Province"),
-          ),
-          SizedBox(height: 8.0),
-          TextField(
-            controller: city,
-            decoration: buildInputDecoration("City"),
-          ),
-          SizedBox(height: 8.0),
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: zip,
-            decoration: buildInputDecoration("Zip Code"),
-          ),
-          SizedBox(height: 8.0),
-          TextField(
-            keyboardType: TextInputType.phone,
-            controller: phone,
-            decoration: buildInputDecoration("Phone"),
-          ),
-          SizedBox(height: 8.0),
-          CheckboxListTile(
-            value: isDefault ?? false,
-            title: Text("Default Address"),
-            onChanged: (value) => setState(() => isDefault = value),
-          ),
-          SizedBox(height: 8.0),
-          ButtonBar(
-            children: [
-              RaisedButton(
-                onPressed: submit,
-                colorBrightness: Brightness.dark,
-                child: Text("Submit"),
-              ),
-            ],
-          ),
-        ],
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [KAppBar()],
+        body: ListView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.all(8.0),
+          children: [
+            TextField(
+              controller: firstName,
+              decoration: buildInputDecoration("First Name"),
+            ),
+            SizedBox(height: 8.0),
+            TextField(
+              controller: lastName,
+              decoration: buildInputDecoration("Last Name"),
+            ),
+            SizedBox(height: 8.0),
+            TextField(
+              controller: company,
+              decoration: buildInputDecoration("Company"),
+            ),
+            SizedBox(height: 8.0),
+            TextField(
+              controller: address1,
+              decoration: buildInputDecoration("Address1"),
+            ),
+            SizedBox(height: 8.0),
+            TextField(
+              controller: address2,
+              decoration: buildInputDecoration("Address2"),
+            ),
+            SizedBox(height: 8.0),
+            TextField(
+              controller: country,
+              decoration: buildInputDecoration("Country"),
+            ),
+            SizedBox(height: 8.0),
+            TextField(
+              controller: province,
+              decoration: buildInputDecoration("Province"),
+            ),
+            SizedBox(height: 8.0),
+            TextField(
+              controller: city,
+              decoration: buildInputDecoration("City"),
+            ),
+            SizedBox(height: 8.0),
+            TextField(
+              keyboardType: TextInputType.number,
+              controller: zip,
+              decoration: buildInputDecoration("Zip Code"),
+            ),
+            SizedBox(height: 8.0),
+            TextField(
+              keyboardType: TextInputType.phone,
+              controller: phone,
+              decoration: buildInputDecoration("Phone"),
+            ),
+            SizedBox(height: 8.0),
+            CheckboxListTile(
+              value: isDefault ?? false,
+              title: Text("Default Address"),
+              onChanged: (value) => setState(() => isDefault = value),
+            ),
+            SizedBox(height: 8.0),
+            ButtonBar(
+              children: [
+                RaisedButton(
+                  onPressed: submit,
+                  colorBrightness: Brightness.dark,
+                  child: Text("Submit"),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

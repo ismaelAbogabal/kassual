@@ -72,7 +72,6 @@
 //             Transform.scale(
 //               scale: ((_controller.value * 2) - 1).abs(),
 //               child: FlatButton(
-//                 textColor: Colors.brown,
 //                 onPressed: () => openProductsListScreen(),
 //                 child: Text("Sun Glasses"),
 //               ),
@@ -80,7 +79,6 @@
 //             Transform.scale(
 //               scale: ((_controller.value * 2) - 1).abs(),
 //               child: FlatButton(
-//                 textColor: Colors.brown,
 //                 onPressed: () => openProductsListScreen(),
 //                 child: Text("Eye Glasses"),
 //               ),

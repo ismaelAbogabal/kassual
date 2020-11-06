@@ -1,11 +1,9 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:kassual/bloc/home_screen/home_screen_bloc.dart';
 import 'package:kassual/bloc/user_bloc/user_bloc.dart';
-import 'package:kassual/config/theme.dart';
 import 'package:kassual/ui/authentication/authentication_screen.dart';
 import 'package:kassual/ui/cart/cart_screen.dart';
 import 'package:kassual/ui/home/home_screen_content.dart';
@@ -17,10 +15,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  body(int _index, List<Collection> collections) {
+  body(int _index, Product card) {
     switch (_index) {
       case 0:
-        return HomeScreenContent(collections: collections);
+        return HomeScreenContent(card: card);
         break;
       case 1:
         return SearchScreen();
@@ -54,17 +52,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     return false;
                   }
                 },
-                child: state.collections.isEmpty
+                child: state.card == null
                     ? Material(
                         child: Center(
-                          child: WavyAnimatedTextKit(
-                            text: ["KASSUAL"],
-                            textStyle: AppTheme.titleTextStyle(),
+                          child: Image.asset(
+                            "assets/images/Kassual.png",
+                            height: 50,
                           ),
                         ),
                       )
                     : Scaffold(
-                        body: body(state.index, state.collections),
+                        body: body(state.index, state.card),
                         bottomNavigationBar: BottomNavigationBar(
                           currentIndex: state.index,
                           onTap: (value) => HomeScreenBloc.of(context).add(

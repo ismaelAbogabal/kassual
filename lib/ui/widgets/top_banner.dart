@@ -70,8 +70,8 @@ class _TopBannerState extends State<TopBanner> {
                 effect: ScrollingDotsEffect(
                   fixedCenter: true,
                   radius: 5,
-                  dotColor: Colors.brown[200],
-                  activeDotColor: Colors.brown[300],
+                  dotColor: Colors.black38,
+                  activeDotColor: Colors.black54,
                 ),
               ),
             ),

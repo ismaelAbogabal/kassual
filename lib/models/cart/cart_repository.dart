@@ -12,7 +12,7 @@ class CartRepository {
     );
 
     if (id == null || id.isEmpty) {
-      String id = await ShopifyCheckout.instance.createCheckout();
+      id = await ShopifyCheckout.instance.createCheckout();
       SharedPreferences.getInstance().then(
         (value) => value.setString("checkout_id", id),
       );
@@ -103,10 +103,30 @@ class CartRepository {
     return init(checkout.id);
   }
 
+  Future<void> setAddress(Address address) async {
+    await ShopifyCheckout.instance
+        .shippingAddressUpdate(
+          checkout.id,
+          address.address1,
+          address.address2,
+          address.company,
+          address.city,
+          address.country,
+          address.firstName,
+          address.lastName,
+          address.phone,
+          address.province,
+          address.zip,
+        )
+        .catchError((err) {});
+  }
+
   static Future<List<Order>> allOrders() async {
     try {
       String accessToken = await ShopifyAuth.currentCustomerAccessToken;
       return ShopifyCheckout.instance.getAllOrders(accessToken);
-    } catch (e) {}
+    } catch (e) {
+      return [];
+    }
   }
 }
