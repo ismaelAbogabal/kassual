@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_shopify/models/src/product.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kassual/models/product/filter.dart';
 import 'package:kassual/models/product/products_repository.dart';
+import 'package:kassual/ui/product/filter_screen.dart';
 import 'package:kassual/ui/product/product_card.dart';
 import 'package:kassual/ui/widgets/app_bar.dart';
 import 'package:kassual/ui/widgets/loading_widget.dart';
@@ -17,6 +17,7 @@ class ProductLisScreen extends StatefulWidget {
 }
 
 class _ProductLisScreenState extends State<ProductLisScreen> {
+  Filter filter;
   List<Product> products;
   bool gettingData = false;
   String _lastProductCursor;
@@ -25,14 +26,19 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
 
   @override
   void initState() {
+    filter = widget.filter;
     getProducts();
-    scrollController.addListener(() {
-      if (!gettingData &&
-          scrollController.offset ==
-              scrollController.position.maxScrollExtent) {
-        getProducts();
-      }
-    });
+    scrollController.addListener(
+      () {
+        if (!gettingData &&
+            (scrollController.offset -
+                        scrollController.position.maxScrollExtent)
+                    .abs() <
+                20) {
+          getProducts();
+        }
+      },
+    );
     super.initState();
   }
 
@@ -40,36 +46,21 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
     setState(() {
       gettingData = true;
     });
-    if (widget.filter.collectionId != null) {
-      products ??= [];
 
-      var _products = await ProductRepository.collectionProducts(
-        widget.filter.collectionId,
-        _lastProductCursor,
-        20,
-      );
+    var _products = await ProductRepository.productsWithFilter(
+      filter,
+      lastCursor: _lastProductCursor,
+      lastCursorSetter: (s) {
+        _lastProductCursor = s;
+      },
+    );
+
+    setState(() {
+      products ??= [];
       products.addAll(_products ?? []);
-      _lastProductCursor = products.last.cursor;
-
-      setState(() {
-        gettingData = false;
-      });
-    } else {
-      var _products = await ProductRepository.productsWithFilter(
-        widget.filter,
-        lastCursor: _lastProductCursor,
-        lastCursorSetter: (c) => _lastProductCursor = c,
-      ).catchError((e) {
-        setState(() {
-          gettingData = false;
-        });
-      });
-      products ??= [];
-      setState(() {
-        products.addAll(_products ?? []);
-        gettingData = false;
-      });
-    }
+      if (products.isNotEmpty) _lastProductCursor = products.last.cursor;
+      gettingData = false;
+    });
   }
 
   @override
@@ -84,28 +75,67 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
               controller: scrollController,
               physics: BouncingScrollPhysics(),
               slivers: [
-                KAppBar(),
+                KAppBar(
+                  action: buildFilterButton(context),
+                ),
                 SliverGrid.count(
                     childAspectRatio: .5,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
                     crossAxisCount: 2,
                     children: (products ?? [])
-                        .map<Widget>(
-                            (e) => ProductCard(product: e, withHero: true))
+                        .map<Widget>((e) => ProductCard(
+                              product: e,
+                              withHero: true,
+                            ))
                         .toList()),
-                SliverToBoxAdapter(
-                  child: Container(
-                    width: double.infinity,
-                    height: 50,
-                    child: gettingData
-                        ? LoadingWidget()
-                        : null,
+                if (gettingData)
+                  SliverToBoxAdapter(
+                    child: Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height / 2,
+                      child: LoadingWidget(),
+                    ),
                   ),
-                ),
+                if (!gettingData && products.isEmpty)
+                  SliverToBoxAdapter(
+                    child: Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height -
+                          2 * kToolbarHeight,
+                      child: Center(
+                        child: Image.asset("assets/images/no_products.png"),
+                      ),
+                    ),
+                  ),
               ],
             ),
     );
+  }
+
+  buildFilterButton(BuildContext context) {
+    return filter.collectionId != null
+        ? Container()
+        : IconButton(
+            icon: Icon(Icons.filter_alt_outlined),
+            onPressed: () async {
+              var _filter = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FilterScreen(
+                    filter: filter,
+                  ),
+                ),
+              );
+
+              if (_filter is Filter) {
+                products = [];
+                _lastProductCursor = null;
+                filter = _filter;
+                getProducts();
+              }
+            },
+          );
   }
 
   NestedScrollView buildNestedScrollView() {
@@ -124,18 +154,6 @@ class _ProductLisScreenState extends State<ProductLisScreen> {
           children: products.map<Widget>((e) {
             return ProductCard(product: e);
           }).toList()),
-    );
-  }
-
-  AppBar buildAppBar() {
-    return AppBar(
-      title: Text("KASSUAL"),
-      actions: [
-        IconButton(
-          icon: SvgPicture.asset("assets/images/filter_outline.svg"),
-          onPressed: () {},
-        )
-      ],
     );
   }
 }

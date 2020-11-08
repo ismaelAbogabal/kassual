@@ -90,8 +90,7 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                 buildCard(
                   title: "New Arrival",
                   subtitle: "Shop now",
-                  image:
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSHbbCmRnpl_7EdIT8sNDUqjBFWQRwfP0gg2w&usqp=CAU",
+                  image: "assets/images/home_screen/new_arrival.jpg",
                   route: ProductLisScreen(
                     filter: Filter(collectionId: newArrivalCollectionId),
                   ),

@@ -8,7 +8,6 @@ import 'package:kassual/ui/cart/cart_empty.dart';
 import 'package:kassual/ui/cart/cart_item.dart';
 import 'package:kassual/ui/cart/cart_stepper_widget.dart';
 import 'package:kassual/ui/widgets/app_bar.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -30,7 +29,6 @@ class CartScreen extends StatelessWidget {
 
   Scaffold loaded(Checkout cart, BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: Text("KASSUAL"), toolbarHeight: 100),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [KAppBar()],
         body: ListView(

@@ -81,7 +81,7 @@ class ProductCard extends StatelessWidget {
             Navigator.pop(context);
           }
           CartBloc.of(context).add(
-              CartEventAddProduct(product.productVariants.first.id, context));
+              CartEventAddProduct(product.productVariants.first.id, context),);
           HomeScreenBloc.of(context).add(HomeScreenSetScreen(2));
         },
         icon: SvgPicture.asset("assets/images/bag_outline_black.svg"),
